@@ -9,11 +9,29 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function index(Request $request)
     {
-        //
-        // return view('home');
-        $data = Product::all();
+        // Membuat query builder baru untuk model Product
+        $query = Product::query();
+        // Cek apakah ada parameter 'search' di request
+        if ($request->has('search') && $request->search != '') {
+            // Melakukan pencarian berdasarkan nama produk atau informasi
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('product_name', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($request->has('sort')) {
+            $sort = $request->get('sort');
+            $direction = $request->get('direction', 'asc');
+            $query->orderBy($sort, $direction);
+        }
+
+        
+      
+        // paginate
+        $data = $query->paginate(perPage: 2);
         return view("master-data.product-master.index-product", compact('data'));
     }
 
@@ -45,7 +63,8 @@ class ProductController extends Controller
         Product::create($validasi_data);
 
 
-        return redirect()->back()->with('success', 'product created successfully');
+       return redirect()->back()->with('success', 'Product created successfully!');
+
 
     }
 
@@ -55,6 +74,8 @@ class ProductController extends Controller
     public function show(string $id)
     {
         //
+        $product = Product::findOrFail($id);
+        return view("master-data.product-master.detail-product", compact('product'));
     }
 
     /**
@@ -92,7 +113,8 @@ class ProductController extends Controller
             'producer'=> $request->producer
         ]);
 
-        return redirect()->back()->with('success', 'Product update succesfully!');
+        return redirect()->back()->with('success', 'Product updated successfully!');
+
     }
 
     /**
@@ -100,6 +122,14 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        //berdasarkan id
+        $product = Product::find($id);
+        if ($product){
+            $product->delete();
+            return redirect()->back()->with('success', 'Product berhasil dihapus.');
+        }
+
+        
+        return redirect()->back()->with('error', 'Product tidak ditemukan.');
     }
 }

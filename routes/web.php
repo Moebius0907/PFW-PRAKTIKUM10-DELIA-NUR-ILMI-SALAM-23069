@@ -21,10 +21,10 @@ Route::middleware('auth', 'verified', 'RoleCheck:admin')->group(function () {
 Route::get('/product', [ProductController::class, 'index'])->name('product-index');
 Route::get('/product/create', [ProductController::class, 'create'])->name("product-create");
 Route::post('/product', [ProductController::class, 'store'])->name("product-store");
-Route::get('/product/{id}', [ProductController::class, 'show']);
+Route::get('/product/{id}', [ProductController::class, 'show'])->name("product-detail");
 Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name (name: 'product-edit');
 Route::put('/product/{id}', [ProductController::class, 'update'])->name (name: 'product-update');
-Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product-destroy');
+Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product-delete');
 
 
 require __DIR__.'/auth.php';

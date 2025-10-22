@@ -80,6 +80,24 @@
 
                             <button type="submit" class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
                         </form>
+
+                        <!-- SweetAlert2 Untuk Alert ketika berhasil menambahkan produk-->
+                         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                         @if (session('success'))
+                         <script>
+                         document.addEventListener("DOMContentLoaded", function () {
+                            Swal.fire({
+                                title: "Success!",
+                                text: "{{ session('success') }}",
+                                icon: "success",
+                                confirmButtonText: "OK",
+                                confirmButtonColor: "#4F46E5", 
+                             }).then(() => {// Setelah klik OK, arahkan ke halaman index
+                             window.location.href = "{{ route('product-index') }}";
+                            });
+                            });
+                            </script>
+                            @endif
                     </div>
 
 

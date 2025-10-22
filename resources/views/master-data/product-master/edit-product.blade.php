@@ -71,6 +71,26 @@
                                     focus:ring-indigo-500">Update Product</button>
                                 </div>
                             </form>
+
+                        <!-- SweetAlert2 Untuk Alert ketika berhasil Edit produk-->
+                         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                         @if (session('success'))
+                         <script>
+                         document.addEventListener("DOMContentLoaded", function () {
+                            Swal.fire({
+                                title: "Success!",
+                                text: "{{ session('success') }}",
+                                icon: "success",
+                                confirmButtonText: "OK",
+                                confirmButtonColor: "#4F46E5", 
+                             }).then(() => {// Setelah klik OK, arahkan ke halaman index
+                             window.location.href = "{{ route('product-index') }}";
+                            });
+                            });
+                            </script>
+                            @endif
+                    </div>
+
                         </div>
                     </div>
                 </div>
