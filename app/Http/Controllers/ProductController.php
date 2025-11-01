@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 use App\Models\Product;
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\Browsershot\Browsershot;
+
 
 class ProductController extends Controller
 {
@@ -31,7 +36,7 @@ class ProductController extends Controller
         
       
         // paginate
-        $data = $query->paginate(perPage: 2);
+        $data = $query->paginate(perPage: 5);
         return view("master-data.product-master.index-product", compact('data'));
     }
 
@@ -132,4 +137,36 @@ class ProductController extends Controller
         
         return redirect()->back()->with('error', 'Product tidak ditemukan.');
     }
+
+    public function exportExcel () {
+        return Excel::download(new ProductsExport, 'product.xlsx');
+    }
+
+    public function exportPDF(){
+        $products = Product::all(); // Ambil data produk
+        $pdf = PDF::loadView('template.products', compact('products'));
+        return $pdf->download('products.pdf');
+
+    }
+
+
+   public function exportImage() {
+    // Ambil semua data produk
+    $products = Product::all();
+
+    // Render view HTML menjadi string
+    $html = view('template.products', compact('products'))->render();
+
+    // Tentukan path untuk menyimpan file JPG
+    $path = public_path('products.jpg');
+
+    // Gunakan Browsershot untuk membuat JPG
+    Browsershot::html($html)
+        ->windowSize(1200, 800)
+        ->save($path);
+
+    // Download file JPG
+    return response()->download($path);
+}
+
 }

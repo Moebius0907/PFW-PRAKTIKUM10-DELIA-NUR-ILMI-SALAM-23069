@@ -26,5 +26,10 @@ Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name (name
 Route::put('/product/{id}', [ProductController::class, 'update'])->name (name: 'product-update');
 Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product-delete');
 
+Route::get('/product/export/excel', [ProductController::class, 'exportExcel'])->name('product-export-excel');
+Route::get('/product/export/pdf', [ProductController::class, 'exportPDF'])->name('product-export-pdf');
+Route::get('/product/export/image', [ProductController::class, 'exportImage'])->name('product-export-image');
+
+
 
 require __DIR__.'/auth.php';
